@@ -1,8 +1,12 @@
 package e1;
 
-public class SilverBankAccount implements BankAccount {
+public class BaseDecoratorBankAccount implements BankAccount {
 
-    private final BankAccount base = new CoreBankAccount();
+    private final BankAccount base;
+
+    public BaseDecoratorBankAccount(BankAccount base) {
+        this.base = base;
+    }
 
     public int getBalance() {
         return base.getBalance();
@@ -16,6 +20,6 @@ public class SilverBankAccount implements BankAccount {
         if (this.getBalance() < amount){
             throw new IllegalStateException();
         }
-        base.withdraw(amount + 1);
+        base.withdraw(amount);
     }
 }
