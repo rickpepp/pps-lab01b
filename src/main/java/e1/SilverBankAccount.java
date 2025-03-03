@@ -1,8 +1,8 @@
 package e1;
 
-public class SilverBankAccount {
+public class SilverBankAccount implements BankAccount {
 
-    private CoreBankAccount base = new CoreBankAccount();
+    private final BankAccount base = new CoreBankAccount();
 
     public int getBalance() {
         return base.getBalance();
