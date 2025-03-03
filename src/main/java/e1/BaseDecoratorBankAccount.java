@@ -17,9 +17,6 @@ public class BaseDecoratorBankAccount implements BankAccount {
     }
 
     public void withdraw(int amount) {
-        if (this.getBalance() < amount){
-            throw new IllegalStateException();
-        }
         base.withdraw(amount);
     }
 }
