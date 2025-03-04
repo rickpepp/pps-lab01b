@@ -4,7 +4,6 @@ import java.util.Optional;
 
 public class StaticFeeDecorator extends BaseDecoratorBankAccount {
 
-    private final static int STATIC_FEE = 1;
     private final Integer fee;
 
     public StaticFeeDecorator(BankAccount base, Integer fee) {

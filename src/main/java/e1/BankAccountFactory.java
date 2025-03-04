@@ -8,4 +8,11 @@ public class BankAccountFactory {
         coreAccount = new OverDraftDecorator(coreAccount, 0);
         return coreAccount;
     }
+
+    public BankAccount createGoldBankAccount() {
+        BankAccount coreAccount = new CoreBankAccount();
+        coreAccount = new BaseDecoratorBankAccount(coreAccount);
+        coreAccount = new OverDraftDecorator(coreAccount, 500);
+        return coreAccount;
+    }
 }
