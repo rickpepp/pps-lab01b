@@ -10,11 +10,17 @@ public class LogicsImpl implements Logics {
 	private final int size;
 	 
     public LogicsImpl(int size){
-    	this.size = size;
+		checkValidSize(size);
+		this.size = size;
         this.pawn = this.randomEmptyPosition();
         this.knight = this.randomEmptyPosition();	
     }
-    
+
+	private void checkValidSize(int size) {
+		if (size <= 1)
+			throw new IllegalArgumentException();
+	}
+
 	private final Pair<Integer,Integer> randomEmptyPosition(){
     	Pair<Integer,Integer> pos = new Pair<>(this.random.nextInt(size),this.random.nextInt(size));
     	// the recursive call below prevents clash with an existing pawn
