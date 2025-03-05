@@ -39,31 +39,39 @@ public class LogicTest {
 
   @Test
   public void testInvalidNegativePosition() {
-    assertThrows(IndexOutOfBoundsException.class,
-            () -> new LogicsImpl(VALID_SIZE, new Pair<>(INVALID_SUBZERO_X_KNIGHT, INVALID_SUBZERO_Y_KNIGHT), new Pair<>(VALID_X_PAWN, VALID_Y_PAWN)));
+    assertThrows(IndexOutOfBoundsException.class, () -> new LogicsImpl(VALID_SIZE,
+            new Pair<>(INVALID_SUBZERO_X_KNIGHT, INVALID_SUBZERO_Y_KNIGHT),
+            new Pair<>(VALID_X_PAWN, VALID_Y_PAWN)));
   }
 
   @Test
   public void testInvalidMajorOfSizePosition() {
-    assertThrows(IndexOutOfBoundsException.class,
-            () -> new LogicsImpl(VALID_SIZE, new Pair<>(INVALID_X_KNIGHT, INVALID_Y_KNIGHT), new Pair<>(VALID_X_PAWN, VALID_Y_PAWN)));
+    assertThrows(IndexOutOfBoundsException.class, () -> new LogicsImpl(VALID_SIZE,
+            new Pair<>(INVALID_X_KNIGHT, INVALID_Y_KNIGHT),
+            new Pair<>(VALID_X_PAWN, VALID_Y_PAWN)));
   }
 
   @Test
   public void testValidTrueHitFunction() {
-    Logics logics = new LogicsImpl(VALID_SIZE, new Pair<>(VALID_X_KNIGHT, VALID_Y_KNIGHT), new Pair<>(VALID_X_PAWN, VALID_Y_PAWN));
+    Logics logics = new LogicsImpl(VALID_SIZE,
+            new Pair<>(VALID_X_KNIGHT, VALID_Y_KNIGHT),
+            new Pair<>(VALID_X_PAWN, VALID_Y_PAWN));
     assertTrue(logics.hit(VALID_X_PAWN, VALID_Y_PAWN));
   }
 
   @Test
   public void testValidFalseHitFunction() {
-    Logics logics = new LogicsImpl(VALID_SIZE, new Pair<>(VALID_X_KNIGHT, VALID_Y_KNIGHT), new Pair<>(VALID_X_PAWN + 1, VALID_Y_PAWN));
+    Logics logics = new LogicsImpl(VALID_SIZE,
+            new Pair<>(VALID_X_KNIGHT, VALID_Y_KNIGHT),
+            new Pair<>(VALID_X_PAWN + 1, VALID_Y_PAWN));
     assertFalse(logics.hit(VALID_X_KNIGHT + 1, VALID_Y_KNIGHT + 1));
   }
 
   @Test
   public void testInvalidHitFunction() {
-    Logics logics = new LogicsImpl(VALID_SIZE, new Pair<>(VALID_X_KNIGHT, VALID_Y_KNIGHT), new Pair<>(VALID_X_PAWN, VALID_Y_PAWN));
+    Logics logics = new LogicsImpl(VALID_SIZE,
+            new Pair<>(VALID_X_KNIGHT, VALID_Y_KNIGHT),
+            new Pair<>(VALID_X_PAWN, VALID_Y_PAWN));
     assertThrows(IndexOutOfBoundsException.class,
             () -> logics.hit(INVALID_X_KNIGHT, INVALID_Y_KNIGHT));
   }
