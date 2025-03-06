@@ -13,6 +13,10 @@ public class BaseChessPieceImpl implements ChessPiece {
         this.movementFunction = movementFunction;
     }
 
+    public void setNewPosition(Pair<Integer, Integer> newPosition) {
+        this.position = Optional.of(newPosition);
+    }
+
     public Pair<Integer, Integer> getPosition() {
         checkPositionIsSet();
         return this.position.get();
@@ -22,6 +26,12 @@ public class BaseChessPieceImpl implements ChessPiece {
         checkPositionIsSet();
         checkValidActualPositionWithSizeOfTheBoard(sizeOfTheBoard);
         return movementFunction.getMovementFunction().apply(this.position.get(), sizeOfTheBoard);
+    }
+
+    public Collection<Pair<Integer, Integer>> getPossibleHits(int sizeOfTheBoard) {
+        checkPositionIsSet();
+        checkValidActualPositionWithSizeOfTheBoard(sizeOfTheBoard);
+        return movementFunction.getHitFunction().apply(this.position.get(), sizeOfTheBoard);
     }
 
     private void checkValidActualPositionWithSizeOfTheBoard(int sizeOfTheBoard) {
@@ -41,14 +51,4 @@ public class BaseChessPieceImpl implements ChessPiece {
             throw new IllegalStateException("Position is not set");
     }
 
-    @Override
-    public Collection<Pair<Integer, Integer>> getPossibleHits(int sizeOfTheBoard) {
-        checkPositionIsSet();
-        checkValidActualPositionWithSizeOfTheBoard(sizeOfTheBoard);
-        return movementFunction.getHitFunction().apply(this.position.get(), sizeOfTheBoard);
-    }
-
-    public void setNewPosition(Pair<Integer, Integer> newPosition) {
-        this.position = Optional.of(newPosition);
-    }
 }

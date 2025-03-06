@@ -7,6 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ChessPieceTest {
 
+    private static final int BOARD_DIMENSION = 10;
+    private static final int X_Y_MIDDLE_BOARD_POSITION = 5;
+    private static final int INVALID_X_Y_POSITION = BOARD_DIMENSION;
+    private static final int X_EDGE_POSITION = 9;
+    private static final int Y_EDGE_POSITION = 5;
+
     private ChessPieceFactory factory;
 
     @BeforeEach
@@ -24,66 +30,80 @@ public class ChessPieceTest {
     @Test
     public void testChessPieceGetPosition() {
         ChessPiece knight = factory.createKnight();
-        knight.setNewPosition(new Pair<>(5, 5));
-        assertEquals(new Pair<>(5, 5), knight.getPosition());
+        knight.setNewPosition(new Pair<>(X_Y_MIDDLE_BOARD_POSITION, X_Y_MIDDLE_BOARD_POSITION));
+        assertEquals(new Pair<>(X_Y_MIDDLE_BOARD_POSITION, X_Y_MIDDLE_BOARD_POSITION), knight.getPosition());
     }
 
     @Test
     public void testKnightGetPossibleMovementsInvalidPosition() {
         ChessPiece knight = factory.createKnight();
-        knight.setNewPosition(new Pair<>(10, 10));
+        knight.setNewPosition(new Pair<>(INVALID_X_Y_POSITION, INVALID_X_Y_POSITION));
         assertThrows(IllegalStateException.class,
-                () -> knight.getPossibleMovements(10));
+                () -> knight.getPossibleMovements(BOARD_DIMENSION));
     }
 
     @Test
     public void testKnightGetPossibleMovementsPositionNotSet() {
         ChessPiece knight = factory.createKnight();
         assertThrows(IllegalStateException.class,
-                () -> knight.getPossibleMovements(10));
+                () -> knight.getPossibleMovements(BOARD_DIMENSION));
     }
 
     @Test
     public void testKnightGetPossibleMovements() {
         ChessPiece knight = factory.createKnight();
-        knight.setNewPosition(new Pair<>(5, 5));
+        knight.setNewPosition(new Pair<>(X_Y_MIDDLE_BOARD_POSITION, X_Y_MIDDLE_BOARD_POSITION));
         Collection<Pair<Integer, Integer>> resultExpected = Arrays.asList(
-                new Pair<>(6, 7),
-                new Pair<>(7, 6),
-                new Pair<>(4, 7),
-                new Pair<>(3, 6),
-                new Pair<>(4, 3),
-                new Pair<>(3, 4),
-                new Pair<>(6, 3),
-                new Pair<>(7, 4)
+                new Pair<>(X_Y_MIDDLE_BOARD_POSITION + 1, X_Y_MIDDLE_BOARD_POSITION + 2),
+                new Pair<>(X_Y_MIDDLE_BOARD_POSITION + 2, X_Y_MIDDLE_BOARD_POSITION + 1),
+                new Pair<>(X_Y_MIDDLE_BOARD_POSITION - 1, X_Y_MIDDLE_BOARD_POSITION + 2),
+                new Pair<>(X_Y_MIDDLE_BOARD_POSITION - 2, X_Y_MIDDLE_BOARD_POSITION + 1),
+                new Pair<>(X_Y_MIDDLE_BOARD_POSITION - 1, X_Y_MIDDLE_BOARD_POSITION - 2),
+                new Pair<>(X_Y_MIDDLE_BOARD_POSITION - 2, X_Y_MIDDLE_BOARD_POSITION - 1),
+                new Pair<>(X_Y_MIDDLE_BOARD_POSITION + 1, X_Y_MIDDLE_BOARD_POSITION - 2),
+                new Pair<>(X_Y_MIDDLE_BOARD_POSITION + 2, X_Y_MIDDLE_BOARD_POSITION - 1)
         );
-        assertSameCollection(resultExpected, knight.getPossibleMovements(10));
+        assertSameCollection(resultExpected, knight.getPossibleMovements(BOARD_DIMENSION));
     }
 
     @Test
     public void testKnightGetPossibleMovementsOnEdge() {
         ChessPiece knight = factory.createKnight();
-        knight.setNewPosition(new Pair<>(9, 5));
+        knight.setNewPosition(new Pair<>(X_EDGE_POSITION, Y_EDGE_POSITION));
         Collection<Pair<Integer, Integer>> resultExpected = Arrays.asList(
-                new Pair<>(8, 7),
-                new Pair<>(7, 6),
-                new Pair<>(8, 3),
-                new Pair<>(7, 4)
+                new Pair<>(X_EDGE_POSITION - 2, Y_EDGE_POSITION + 1),
+                new Pair<>(X_EDGE_POSITION - 1, Y_EDGE_POSITION + 2),
+                new Pair<>(X_EDGE_POSITION - 2, Y_EDGE_POSITION - 1),
+                new Pair<>(X_EDGE_POSITION - 1, Y_EDGE_POSITION - 2)
         );
-        assertSameCollection(resultExpected, knight.getPossibleMovements(10));
+        assertSameCollection(resultExpected, knight.getPossibleMovements(BOARD_DIMENSION));
     }
 
     @Test
     public void testKnightGetPossibleHits() {
         ChessPiece knight = factory.createKnight();
-        knight.setNewPosition(new Pair<>(9, 5));
+        knight.setNewPosition(new Pair<>(X_EDGE_POSITION, Y_EDGE_POSITION));
         Collection<Pair<Integer, Integer>> resultExpected = Arrays.asList(
-                new Pair<>(8, 7),
-                new Pair<>(7, 6),
-                new Pair<>(8, 3),
-                new Pair<>(7, 4)
+                new Pair<>(X_EDGE_POSITION - 2, Y_EDGE_POSITION + 1),
+                new Pair<>(X_EDGE_POSITION - 1, Y_EDGE_POSITION + 2),
+                new Pair<>(X_EDGE_POSITION - 2, Y_EDGE_POSITION - 1),
+                new Pair<>(X_EDGE_POSITION - 1, Y_EDGE_POSITION - 2)
         );
-        assertSameCollection(resultExpected, knight.getPossibleHits(10));
+        assertSameCollection(resultExpected, knight.getPossibleHits(BOARD_DIMENSION));
+    }
+
+    @Test
+    public void testPawnGetPositionNotInitialized() {
+        ChessPiece pawn = factory.createPawn();
+        assertThrows(IllegalStateException.class,
+                pawn::getPosition);
+    }
+
+    @Test
+    public void testPawnGetPosition() {
+        ChessPiece pawn = factory.createPawn();
+        pawn.setNewPosition(new Pair<>(X_Y_MIDDLE_BOARD_POSITION, X_Y_MIDDLE_BOARD_POSITION));
+        assertEquals(new Pair<>(X_Y_MIDDLE_BOARD_POSITION, X_Y_MIDDLE_BOARD_POSITION), pawn.getPosition());
     }
 
     private void assertSameCollection(Collection<Pair<Integer, Integer>> collectionExpected, Collection<Pair<Integer, Integer>> collectionResult) {
