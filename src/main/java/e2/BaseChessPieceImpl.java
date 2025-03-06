@@ -1,19 +1,16 @@
 package e2;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class BaseChessPieceImpl implements ChessPiece {
 
     private Optional<Pair<Integer, Integer>> position;
-    //private BiFunction<Pair<Integer, Integer>, Integer, Collection<Pair<Integer, Integer>>> movementFunction;
+    private final ChessPieceFunctions movementFunction;
 
-    public BaseChessPieceImpl(/*BiFunction<Pair<Integer, Integer>, Integer, Collection<Pair<Integer, Integer>>> movementFunction*/) {
+    public BaseChessPieceImpl(ChessPieceFunctions movementFunction) {
         this.position = Optional.empty();
-        /*this.movementFunction = movementFunction;*/
+        this.movementFunction = movementFunction;
     }
 
     public Pair<Integer, Integer> getPosition() {
@@ -22,16 +19,12 @@ public class BaseChessPieceImpl implements ChessPiece {
     }
 
     public Collection<Pair<Integer, Integer>> getPossibleMovements(int sizeOfTheBoard) {
+        checkPositionIsSet();
         checkValidActualPositionWithSizeOfTheBoard(sizeOfTheBoard);
-        /*if (this.position.isEmpty())
-            throw new IllegalStateException("Position is not set");
-        return movementFunction.apply(this.position.get(), sizeOfTheBoard);
-    */
-        throw new UnsupportedOperationException();
+        return movementFunction.getMovementFunction().apply(this.position.get(), sizeOfTheBoard);
     }
 
     private void checkValidActualPositionWithSizeOfTheBoard(int sizeOfTheBoard) {
-        checkPositionIsSet();
         if (this.position.get().getX() < 0
                 || this.position.get().getY() < 0
                 || this.position.get().getX() >= sizeOfTheBoard
