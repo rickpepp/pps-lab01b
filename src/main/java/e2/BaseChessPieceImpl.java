@@ -25,11 +25,15 @@ public class BaseChessPieceImpl implements ChessPiece {
     }
 
     private void checkValidActualPositionWithSizeOfTheBoard(int sizeOfTheBoard) {
-        if (this.position.get().getX() < 0
-                || this.position.get().getY() < 0
-                || this.position.get().getX() >= sizeOfTheBoard
-                || this.position.get().getY() >= sizeOfTheBoard)
+        if (isPositionInTheBoard(sizeOfTheBoard, this.position.get()))
             throw new IllegalStateException("Actual position is invalid with this size of the board");
+    }
+
+    private boolean isPositionInTheBoard(int sizeOfTheBoard, Pair<Integer, Integer> position) {
+        return position.getX() < 0
+                || position.getY() < 0
+                || position.getX() >= sizeOfTheBoard
+                || position.getY() >= sizeOfTheBoard;
     }
 
     private void checkPositionIsSet() {
@@ -39,7 +43,9 @@ public class BaseChessPieceImpl implements ChessPiece {
 
     @Override
     public Collection<Pair<Integer, Integer>> getPossibleHits(int sizeOfTheBoard) {
-        throw new UnsupportedOperationException();
+        checkPositionIsSet();
+        checkValidActualPositionWithSizeOfTheBoard(sizeOfTheBoard);
+        return movementFunction.getHitFunction().apply(this.position.get(), sizeOfTheBoard);
     }
 
     public void setNewPosition(Pair<Integer, Integer> newPosition) {
