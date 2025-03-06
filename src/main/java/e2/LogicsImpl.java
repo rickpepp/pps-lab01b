@@ -4,6 +4,8 @@ import java.util.*;
 
 public class LogicsImpl implements Logics {
 
+	private static final int MIN_SIZE_VALUE = 2;
+
 	private ChessPiece knight;
 	private ChessPiece pawn;
 	private final Random random = new Random();
@@ -21,15 +23,15 @@ public class LogicsImpl implements Logics {
 		checkValidSize(size);
 		this.size = size;
 		createPawnAndKnight();
-		this.pawn.setNewPosition(this.randomEmptyPosition());
-		this.knight.setNewPosition(this.randomEmptyPosition());
+		generateChessPiecesRandomPositions();
 	}
     
 	@Override
 	public boolean hit(int row, int col) {
-		checkValidPosition(new Pair<>(row, col));
-		if (this.knight.getPossibleMovements(this.size).contains(new Pair<>(row, col)))
-			this.knight.setNewPosition(new Pair<>(row, col));
+		Pair<Integer, Integer> positionToEvaluate = new Pair<>(row, col);
+		checkValidPosition(positionToEvaluate);
+		if (this.knight.getPossibleMovements(this.size).contains(positionToEvaluate))
+			this.knight.setNewPosition(positionToEvaluate);
 		return this.knight.getPosition().equals(this.pawn.getPosition());
 	}
 
@@ -43,6 +45,15 @@ public class LogicsImpl implements Logics {
 		return this.pawn.getPosition().equals(new Pair<>(row,col));
 	}
 
+	private void generateChessPiecesRandomPositions() {
+		this.pawn.setNewPosition(this.randomEmptyPosition());
+		Pair<Integer, Integer> pos;
+		do {
+			pos = this.randomEmptyPosition();
+		} while(pos.equals(this.pawn.getPosition()));
+		this.knight.setNewPosition(pos);
+	}
+
 	private void createPawnAndKnight() {
 		ChessPieceFactory factory = new ChessPieceFactory();
 		this.pawn = factory.createPawn();
@@ -50,14 +61,12 @@ public class LogicsImpl implements Logics {
 	}
 
 	private void checkValidSize(int size) {
-		if (size <= 1)
+		if (size < MIN_SIZE_VALUE)
 			throw new IllegalArgumentException();
 	}
 
 	private Pair<Integer,Integer> randomEmptyPosition(){
-		Pair<Integer,Integer> pos = new Pair<>(this.random.nextInt(size),this.random.nextInt(size));
-		// the recursive call below prevents clash with an existing pawn
-		return this.pawn!=null && this.pawn.equals(pos) ? randomEmptyPosition() : pos;
+		return new Pair<>(this.random.nextInt(size),this.random.nextInt(size));
 	}
 
 	private void checkValidPosition(Pair<Integer,Integer> position) {
