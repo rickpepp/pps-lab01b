@@ -17,17 +17,31 @@ public class BaseChessPieceImpl implements ChessPiece {
     }
 
     public Pair<Integer, Integer> getPosition() {
-        if (this.position.isEmpty())
-            throw new IllegalStateException("Position is not set");
+        checkPositionIsSet();
         return this.position.get();
     }
 
     public Collection<Pair<Integer, Integer>> getPossibleMovements(int sizeOfTheBoard) {
+        checkValidActualPositionWithSizeOfTheBoard(sizeOfTheBoard);
         /*if (this.position.isEmpty())
             throw new IllegalStateException("Position is not set");
         return movementFunction.apply(this.position.get(), sizeOfTheBoard);
     */
         throw new UnsupportedOperationException();
+    }
+
+    private void checkValidActualPositionWithSizeOfTheBoard(int sizeOfTheBoard) {
+        checkPositionIsSet();
+        if (this.position.get().getX() < 0
+                || this.position.get().getY() < 0
+                || this.position.get().getX() >= sizeOfTheBoard
+                || this.position.get().getY() >= sizeOfTheBoard)
+            throw new IllegalStateException("Actual position is invalid with this size of the board");
+    }
+
+    private void checkPositionIsSet() {
+        if (this.position.isEmpty())
+            throw new IllegalStateException("Position is not set");
     }
 
     @Override
